@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Musicaguide · Léo Sol Products</title>
+<meta name="description" content="Musicaguide is a Léo Sol product page mock for music people who need a calmer place to start, from beginner to expert.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #252426;
+    --bg-2: #171718;
+    --surface: rgba(238, 228, 218, .055);
+    --surface-strong: rgba(238, 228, 218, .095);
+    --text: #EEE4DA;
+    --muted: #A8BDB6;
+    --soft: #c9c2b8;
+    --faint: #7f8580;
+    --peach: #ECA97E;
+    --gold: #C99654;
+    --mauve: #7C6670;
+    --teal: #A8BDB6;
+    --artist-teal: #79BDB8;
+    --border: rgba(238, 228, 218, .12);
+    --shadow: rgba(0, 0, 0, .55);
+  }
+
+  body[data-theme="light"] {
+    color-scheme: light;
+    --bg: #EEE4DA;
+    --bg-2: #F2EEE7;
+    --surface: rgba(37, 36, 38, .045);
+    --surface-strong: rgba(37, 36, 38, .08);
+    --text: #252426;
+    --muted: #507070;
+    --soft: #4f4d49;
+    --faint: #7C6670;
+    --peach: #C99654;
+    --gold: #B68443;
+    --mauve: #7C6670;
+    --teal: #507070;
+    --artist-teal: #507070;
+    --border: rgba(37, 36, 38, .13);
+    --shadow: rgba(43, 48, 50, .18);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    background:
+      radial-gradient(70% 50% at 18% 0%, color-mix(in srgb, var(--peach) 28%, transparent), transparent 60%),
+      radial-gradient(70% 55% at 100% 10%, color-mix(in srgb, var(--teal) 18%, transparent), transparent 58%),
+      radial-gradient(60% 60% at 52% 110%, color-mix(in srgb, var(--mauve) 24%, transparent), transparent 60%),
+      linear-gradient(158deg, var(--bg) 0%, var(--bg-2) 100%);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  a { color: inherit; }
+  ::selection { background: color-mix(in srgb, var(--peach) 35%, transparent); }
+
+  .wrap { width: min(1160px, calc(100% - 44px)); margin: 0 auto; }
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--bg-2) 78%, transparent);
+    backdrop-filter: blur(16px);
+  }
+  .nav-inner {
+    min-height: 76px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .brand img { width: 42px; height: 42px; object-fit: contain; }
+  .brand span {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--text);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .nav-links a {
+    text-decoration: none;
+    transition: color .25s ease;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .theme-toggle {
+    cursor: pointer;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font: 600 11px/1 "Inter", sans-serif;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+  }
+
+  .hero {
+    position: relative;
+    padding: 78px 0 46px;
+    overflow: hidden;
+  }
+  .hero-mark {
+    position: absolute;
+    right: -120px;
+    top: -58px;
+    width: min(640px, 68vw);
+    opacity: .09;
+    pointer-events: none;
+    filter: saturate(1.1);
+  }
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(360px, .96fr);
+    gap: 42px;
+    align-items: center;
+  }
+  .eyebrow {
+    margin: 0 0 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  h1 {
+    margin: 0;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 400;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: .82;
+    letter-spacing: -.045em;
+  }
+  .hero-copy {
+    max-width: 54ch;
+    margin: 24px 0 0;
+    color: var(--soft);
+    font-size: 17px;
+    line-height: 1.72;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    border-radius: 999px;
+    padding: 0 24px;
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    letter-spacing: .01em;
+    transition: transform .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .button:hover { transform: translateY(-2px); }
+  .button.primary { background: var(--peach); color: #252426; }
+  .button.secondary { border: 1px solid var(--border); color: var(--text); background: color-mix(in srgb, var(--surface) 80%, transparent); }
+
+  .demo-card {
+    position: relative;
+    border: 1px solid var(--border);
+    background:
+      radial-gradient(80% 70% at 90% 0%, color-mix(in srgb, var(--peach) 26%, transparent), transparent 58%),
+      linear-gradient(145deg, color-mix(in srgb, var(--surface-strong) 82%, transparent), color-mix(in srgb, var(--bg-2) 88%, transparent));
+    border-radius: 28px;
+    padding: 18px;
+    box-shadow: 0 48px 90px -54px var(--shadow);
+    overflow: hidden;
+  }
+  .demo-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 4px 4px 16px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .window-dots { display: flex; gap: 7px; }
+  .window-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--peach); opacity: .75; }
+  .chat {
+    min-height: 460px;
+    border-radius: 22px;
+    background: color-mix(in srgb, var(--bg-2) 82%, transparent);
+    border: 1px solid var(--border);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .bubble {
+    width: fit-content;
+    max-width: 92%;
+    border-radius: 18px;
+    padding: 13px 15px;
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .bubble.guide {
+    color: var(--soft);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .bubble.user {
+    align-self: flex-end;
+    color: #252426;
+    background: var(--peach);
+  }
+  .answer {
+    color: var(--soft);
+    background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
+    border: 1px solid var(--border);
+  }
+  .answer strong { color: var(--text); font-weight: 500; }
+  .answer ul { margin: 9px 0 0; padding-left: 18px; }
+  .answer li { margin: 7px 0; }
+  .chat-form {
+    margin-top: auto;
+    display: flex;
+    gap: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 999px;
+    padding: 7px;
+  }
+  .chat-form input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font: 13.5px/1.4 "Inter", sans-serif;
+    padding: 0 10px;
+  }
+  .chat-form input::placeholder { color: var(--faint); }
+  .chat-form button {
+    cursor: pointer;
+    border: 0;
+    border-radius: 999px;
+    background: var(--peach);
+    color: #252426;
+    font: 600 12px/1 "Inter", sans-serif;
+    padding: 11px 16px;
+  }
+
+  .section { padding: 44px 0; }
+  .section-title {
+    margin: 0 0 26px;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 400;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    line-height: .96;
+    letter-spacing: -.025em;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    background: var(--surface);
+    padding: 26px;
+    min-height: 196px;
+  }
+  .card .num {
+    display: inline-flex;
+    width: 32px;
+    height: 32px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: color-mix(in srgb, var(--peach) 16%, transparent);
+    color: var(--peach);
+    font: 600 12px/1 "Inter", sans-serif;
+    margin-bottom: 26px;
+  }
+  .card h3 {
+    margin: 0 0 10px;
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .card p {
+    margin: 0;
+    color: var(--soft);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: .86fr 1.14fr;
+    gap: 18px;
+    align-items: stretch;
+  }
+  .panel {
+    border: 1px solid var(--border);
+    border-radius: 26px;
+    background: var(--surface);
+    padding: 30px;
+  }
+  .panel p {
+    color: var(--soft);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+  }
+  .list {
+    display: grid;
+    gap: 10px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .list li {
+    display: flex;
+    gap: 10px;
+    color: var(--soft);
+    font-size: 13.5px;
+    line-height: 1.55;
+  }
+  .list li::before {
+    content: "";
+    flex: 0 0 auto;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 8px;
+    background: var(--peach);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--peach) 70%, transparent);
+  }
+
+  footer {
+    padding: 54px 0 64px;
+    border-top: 1px solid var(--border);
+    color: var(--faint);
+    font-size: 12px;
+  }
+
+  @media (max-width: 920px) {
+    .hero-grid, .split { grid-template-columns: 1fr; }
+    .cards { grid-template-columns: 1fr; }
+    .hero { padding-top: 44px; }
+    .demo-card { order: -1; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .wrap { width: min(100% - 32px, 1160px); }
+    .brand span { font-size: 22px; }
+    .theme-toggle { padding: 9px 12px; letter-spacing: .08em; }
+    h1 { font-size: clamp(3.5rem, 18vw, 5rem); }
+    .hero-copy { font-size: 15.5px; line-height: 1.65; }
+    .chat { min-height: 510px; padding: 14px; }
+    .chat-form { border-radius: 20px; align-items: stretch; }
+    .chat-form input { min-height: 42px; }
+    .chat-form button { padding-inline: 14px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+  }
+</style>
+</head>
+<body data-theme="dark">
+  <nav class="nav" aria-label="Primary">
+    <div class="wrap nav-inner">
+      <a class="brand" href="index.html" aria-label="Back to Léo Sol Products">
+        <img src="../shared/leo_sol_mark_reversed_light.png" alt="" aria-hidden="true">
+        <span>Léo Sol <span style="color:var(--muted);">Products</span></span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html">Products home</a>
+        <a href="../artist-site/index.html">Artist site ↗</a>
+        <a href="mailto:rosinkai888@gmail.com">Contact</a>
+      </div>
+      <button class="theme-toggle" type="button" data-theme-toggle>Light</button>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <img class="hero-mark" src="../shared/leo_sol_mark_only_lion_sun_4096px.png" alt="" aria-hidden="true">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Musicaguide · Léo Sol Products</p>
+          <h1>Find the sound<br><span style="color:var(--muted);">before it runs.</span></h1>
+          <p class="hero-copy">Musicaguide is for the moment when you know what you want to make, but your brain is doing that annoying little loading wheel thing. Ask for references, vocal chains, structure ideas, or a starting point. Beginner or expert, it meets you where you are and gives you something useful back. Then go make the song.</p>
+          <div class="actions">
+            <a class="button primary" href="#demo">Try the demo</a>
+            <a class="button secondary" href="index.html">Back to Products</a>
+          </div>
+        </div>
+
+        <aside class="demo-card" id="demo" aria-label="Musicaguide demo chat">
+          <div class="demo-top">
+            <div class="window-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            <span>Demo preview</span>
+          </div>
+          <div class="chat" data-chat-log>
+            <div class="bubble guide">Ask the demo question below. I’ll answer like a music nerd friend who actually wants you to finish the track.</div>
+            <form class="chat-form" data-chat-form>
+              <input data-chat-input value="What’s the vocal chain for Frank Ocean’s ‘Lost’?" aria-label="Demo chat message">
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <p class="eyebrow">What it helps with</p>
+        <h2 class="section-title">Less blank page. More direction.</h2>
+        <div class="cards">
+          <article class="card">
+            <span class="num">01</span>
+            <h3>Reference pulls</h3>
+            <p>Start with an artist, song, mood, or texture and get a direction that feels usable instead of random.</p>
+          </article>
+          <article class="card">
+            <span class="num">02</span>
+            <h3>Sound breakdowns</h3>
+            <p>Turn “how do they get that sound?” into practical notes for vocals, drums, effects, arrangement, and feel.</p>
+          </article>
+          <article class="card">
+            <span class="num">03</span>
+            <h3>Song starters</h3>
+            <p>When the idea is half-there, Musicaguide gives you a first move so you stop pacing around the session.</p>
+          </article>
+          <article class="card">
+            <span class="num">04</span>
+            <h3>Experience levels</h3>
+            <p>Keep it simple when you’re learning. Go deeper when you already know the basics. Same guide, different depth.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap split">
+        <div class="panel">
+          <p class="eyebrow" style="margin-bottom:18px;">Why it exists</p>
+          <h2 class="section-title" style="font-size:clamp(2.1rem,4vw,3.4rem);">Built for people who love music enough to overthink it.</h2>
+          <p>Musicaguide is a starting point for people who hear sounds in their head and need help turning the fog into a first move. Not a replacement for taste. Just a better way to begin.</p>
+        </div>
+        <div class="panel">
+          <p class="eyebrow" style="margin-bottom:18px;">Early feature shape</p>
+          <ul class="list">
+            <li>Ask about a sound, artist, or reference track.</li>
+            <li>Choose the depth you need: beginner, intermediate, advanced, or expert.</li>
+            <li>Get a useful breakdown without the fake “industry expert” voice.</li>
+            <li>Save the answer as a starting point for your own session.</li>
+            <li>Use it as a creative guide, not a replacement for taste.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;">
+        <span>© 2026 Léo Sol Products · Musicaguide</span>
+        <span>Graphite Halo with a little Ocean Haze</span>
+      </div>
+    </div>
+  </footer>
+
+<script>
+  (function(){
+    var body = document.body;
+    var toggle = document.querySelector('[data-theme-toggle]');
+    if (toggle) {
+      toggle.addEventListener('click', function(){
+        var next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', next);
+        toggle.textContent = next === 'dark' ? 'Light' : 'Dark';
+      });
+    }
+
+    var form = document.querySelector('[data-chat-form]');
+    var input = document.querySelector('[data-chat-input]');
+    var log = document.querySelector('[data-chat-log]');
+    var answered = false;
+    var answerHTML = '<div class="bubble answer"><strong>Not the exact Frank session, but a “Lost”-inspired chain to chase that clean, close, floating vocal:</strong><ul><li><strong>Clean take first:</strong> keep the vocal intimate, dry, and not over-sung. The performance matters more than the plugins.</li><li><strong>Pitch + cleanup:</strong> light tuning, then subtract mud around the low-mids before boosting anything shiny.</li><li><strong>Compression:</strong> one smooth compressor for control, then a faster one catching peaks so the vocal sits still without feeling crushed.</li><li><strong>Tone:</strong> add a little top-end air, but keep it soft. Think expensive daylight, not crispy YouTube preset.</li><li><strong>Space:</strong> short room or plate tucked low, plus a delay you feel more than hear. Automate throws on the ends of lines.</li><li><strong>Final move:</strong> print a rough, walk away for ten minutes, then only fix what actually bothers you.</li></ul></div>';
+
+    if (form && input && log) {
+      form.addEventListener('submit', function(event){
+        event.preventDefault();
+        var text = input.value.trim() || "What’s the vocal chain for Frank Ocean’s ‘Lost’?";
+        if (!answered) {
+          var user = document.createElement('div');
+          user.className = 'bubble user';
+          user.textContent = text;
+          log.insertBefore(user, form);
+          form.insertAdjacentHTML('beforebegin', answerHTML);
+          answered = true;
+          input.value = '';
+          input.placeholder = 'Demo answered.';
+        } else {
+          input.value = '';
+          input.placeholder = 'Only one pregenerated answer in this preview.';
+        }
+      });
+    }
+  })();
+</script>
+</body>
+</html>

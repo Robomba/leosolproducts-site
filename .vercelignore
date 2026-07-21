@@ -1,0 +1,5 @@
+*.md
+from-perplexity/
+docs/
+AGENTS.md
+SECURITY.md
