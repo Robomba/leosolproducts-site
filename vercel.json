@@ -31,5 +31,47 @@
         }
       ]
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "leosolproducts.com"
+        }
+      ],
+      "destination": "/home.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.leosolproducts.com"
+        }
+      ],
+      "destination": "/home.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "xn--losol-bsa.com"
+        }
+      ],
+      "destination": "/artist-site/index.html"
+    },
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.xn--losol-bsa.com"
+        }
+      ],
+      "destination": "/artist-site/index.html"
+    }
   ]
 }
