@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>setcheck — you've been sent a project</title>
+<style>
+  :root{--bg:#252426;--card:#2e2d2f;--ink:#EEE4DA;--mut:#93a39c;--acc:#ECA97E;--gold:#C99654}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+  .card{background:var(--card);border:1px solid rgba(238,228,218,.12);border-radius:18px;max-width:440px;width:100%;padding:36px}
+  h1{font-size:22px;font-weight:500;margin:0 0 6px}
+  .mut{color:var(--mut);font-size:13px}
+  .btn{display:block;width:100%;margin-top:22px;padding:14px;border:0;border-radius:100px;background:var(--acc);color:#252426;font-size:15px;font-weight:600;cursor:pointer}
+  .btn[disabled]{opacity:.5;cursor:default}
+  input{width:100%;margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid rgba(238,228,218,.2);background:#242325;color:var(--ink);font-size:16px;letter-spacing:.3em;text-align:center}
+  .err{color:#e08f8f;font-size:13px;margin-top:12px;display:none}
+  .ok{color:#9fd0a9;font-size:13px;margin-top:12px;display:none}
+  .fine{font-size:11px;color:var(--mut);margin-top:20px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1 id="title">You've been sent a project</h1>
+  <p class="mut" id="sub">Checking the delivery…</p>
+  <input id="pin" placeholder="PIN" style="display:none" inputmode="numeric" autocomplete="one-time-code">
+  <button class="btn" id="go" disabled>Download project</button>
+  <p class="err" id="err"></p>
+  <p class="ok" id="ok"></p>
+  <p class="fine">This file is end-to-end encrypted. The key is in this link and never reaches any server — it decrypts right here in your browser. Sent with setcheck.</p>
+</div>
+<script id="core">
+// ---- decrypt core (kept framework-free so it can be unit-tested in Node) ----
+const SC = {
+  MAGIC: 'STCKSEAL1',
+  b64u: s => Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(s.length/4)*4,'=')), c=>c.charCodeAt(0)),
+  async unsealWithSecret(sealedBytes, secret) {
+    const dv = new Uint8Array(sealedBytes);
+    const magic = new TextDecoder().decode(dv.slice(0, 9));
+    if (magic !== SC.MAGIC) throw new Error('not a setcheck package');
+    const hlen = new DataView(dv.buffer, dv.byteOffset + 9, 4).getUint32(0, false);
+    const header = JSON.parse(new TextDecoder().decode(dv.slice(13, 13 + hlen)));
+    const body = dv.slice(13 + hlen);
+    if (!header.pw || !header.pw.length) throw new Error('this delivery is locked to a specific person (no link access)');
+    const enc = new TextEncoder();
+    const base = await crypto.subtle.importKey('raw', enc.encode(secret), 'PBKDF2', false, ['deriveBits']);
+    let fileKey = null;
+    for (const st of header.pw) {
+      try {
+        const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', hash:'SHA-256', salt: SC.b64u(st.s), iterations: 310000 }, base, 256);
+        const wk = await crypto.subtle.importKey('raw', bits, 'AES-GCM', false, ['decrypt']);
+        fileKey = new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: SC.b64u(st.n) }, wk, SC.b64u(st.k)));
+        break;
+      } catch (e) {}
+    }
+    if (!fileKey) throw new Error('wrong PIN or link key');
+    const fk = await crypto.subtle.importKey('raw', fileKey, 'AES-GCM', false, ['decrypt']);
+    return new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: SC.b64u(header.n) }, fk, body));
+  }
+};
+if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
+</script>
+<script>
+(async () => {
+  // link: https://open.<domain>/#<id>.<secret>   blobs at STORE/<id>.sealed + <id>.json
+  const STORE = window.SETCHECK_STORE || 'https://pub-ce67196b0b65467394bc7458f1189ca3.r2.dev';   // R2 public bucket / CDN base
+  const $ = id => document.getElementById(id);
+  const frag = location.hash.slice(1);
+  const [id, secret] = frag.split('.');
+  if (!id || !secret) { $('sub').textContent = 'This link is incomplete — ask the sender to re-copy it.'; return; }
+  let meta = null;
+  try { meta = await (await fetch(`${STORE}/${id}.json`)).json(); } catch {}
+  if (meta) {
+    if (meta.revoked) { $('sub').textContent = 'This link was revoked by the sender.'; return; }
+    if (meta.expiresAt && Date.now() > meta.expiresAt) { $('sub').textContent = 'This link has expired.'; return; }
+    $('title').textContent = `${meta.sender || 'Someone'} sent you “${meta.track || 'a project'}”`;
+    $('sub').textContent = `Version ${meta.version || 1} · encrypted end-to-end`;
+    if (meta.hasPin) $('pin').style.display = 'block';
+  } else { $('sub').textContent = 'Ready. (Could not load delivery info — you can still try downloading.)'; }
+  $('go').disabled = false;
+  $('go').onclick = async () => {
+    $('err').style.display = 'none'; $('go').disabled = true; $('go').textContent = 'Decrypting…';
+    try {
+      const blob = await (await fetch(`${STORE}/${id}.sealed`)).arrayBuffer();
+      const sec = $('pin').value ? `${secret}:${$('pin').value}` : secret;
+      const plain = await SC.unsealWithSecret(blob, sec);
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([plain], { type: 'application/zip' }));
+      a.download = `${(meta && meta.track ? meta.track.replace(/[^\w\- ]+/g,'') : 'project')}.setpkg.zip`;
+      a.click();
+      $('ok').textContent = 'Downloaded. Unzip it — HOW-THIS-WORKS.md inside explains everything.'; $('ok').style.display = 'block';
+      $('go').textContent = 'Download again';
+    } catch (e) {
+      $('err').textContent = e.message.includes('wrong') ? 'Wrong PIN — try again.' : ('Could not open this delivery: ' + e.message);
+      $('err').style.display = 'block'; $('go').textContent = 'Download project';
+    }
+    $('go').disabled = false;
+  };
+})();
+</script>
+</body>
+</html>
