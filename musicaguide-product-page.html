@@ -400,20 +400,26 @@
   <link rel="apple-touch-icon" href="/shared/leo_sol_mark_only_lion_sun_4096px.png">
 </head>
 <body data-theme="dark">
-  <nav class="nav" aria-label="Primary">
-    <div class="wrap nav-inner">
-      <a class="brand" href="/" aria-label="Back to Léo Sol Products">
-        <img src="shared/leo_sol_mark_reversed_light.png" alt="" aria-hidden="true">
-        <span>Léo Sol <span style="color:var(--muted);">Products</span></span>
-      </a>
-      <div class="nav-links">
-        <a href="/">Products home</a>
-        <a href="artist-site/index.html">Artist site ↗</a>
-        <a href="mailto:rosinkai888@gmail.com">Contact</a>
-      </div>
-      <button class="theme-toggle" type="button" data-theme-toggle>Light</button>
+  <header style="position:sticky;top:0;z-index:40;backdrop-filter:blur(14px);background:linear-gradient(180deg, rgba(23,23,24,.82), rgba(23,23,24,.42));border-bottom:1px solid rgba(238,228,218,.1);">
+    <div style="display:flex;align-items:center;gap:15px;max-width:1200px;margin:0 auto;padding:9px 40px;">
+      <nav aria-label="Switch site" style="display:flex;align-items:center;gap:15px;">
+        <a href="https://léosol.com/" aria-label="Go to Léo Sol artist site" style="display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:12px;letter-spacing:.02em;color:#93a39c;font-weight:400;opacity:.9;"><span>Artist · léosol.com</span><span style="font-size:11px;opacity:.75;">↗</span></a>
+        <span style="width:1px;height:12px;background:rgba(238,228,218,.18);"></span>
+        <a href="/" style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;font-size:12px;letter-spacing:.02em;color:#EEE4DA;font-weight:500;"><span style="width:5px;height:5px;border-radius:50%;background:#ECA97E;box-shadow:0 0 9px rgba(236,169,126,.8);"></span><span>Products · leosolproducts.com</span></a>
+      </nav>
     </div>
-  </nav>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:26px;max-width:1200px;margin:0 auto;padding:8px 40px 16px;border-top:1px solid rgba(238,228,218,.07);flex-wrap:wrap;">
+      <a href="/" style="display:inline-flex;align-items:center;gap:12px;text-decoration:none;">
+        <img src="shared/leo_sol_mark_reversed_light.png" alt="" aria-hidden="true" style="width:44px;height:44px;object-fit:contain;opacity:.96;" />
+        <span style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:26px;letter-spacing:-.01em;color:#EEE4DA;line-height:1;">Léo Sol <span style="color:#A8BDB6;">Products</span></span>
+      </a>
+      <nav aria-label="Primary" style="display:flex;align-items:center;gap:30px;">
+        <a href="/" style="text-decoration:none;font-size:13.5px;letter-spacing:.01em;color:#A8BDB6;font-weight:400;transition:color .3s ease;">Tools</a>
+        <a href="/" style="text-decoration:none;font-size:13.5px;letter-spacing:.01em;color:#A8BDB6;font-weight:400;transition:color .3s ease;">Launches</a>
+        <a href="mailto:rosinkai888@gmail.com" style="text-decoration:none;font-size:13.5px;letter-spacing:.01em;color:#A8BDB6;font-weight:400;transition:color .3s ease;">Contact</a>
+      </nav>
+    </div>
+  </header>
 
   <main>
     <section class="hero">
