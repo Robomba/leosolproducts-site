@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>setcheck — you've been sent a project</title>
+<title>SetCheck — you've been sent a project</title>
 <style>
   :root{--bg:#252426;--card:#2e2d2f;--ink:#EEE4DA;--mut:#93a39c;--acc:#ECA97E;--gold:#C99654}
   *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
@@ -35,7 +35,7 @@ const SC = {
   async unsealWithSecret(sealedBytes, secret) {
     const dv = new Uint8Array(sealedBytes);
     const magic = new TextDecoder().decode(dv.slice(0, 9));
-    if (magic !== SC.MAGIC) throw new Error('not a setcheck package');
+    if (magic !== SC.MAGIC) throw new Error('not a SetCheck package');
     const hlen = new DataView(dv.buffer, dv.byteOffset + 9, 4).getUint32(0, false);
     const header = JSON.parse(new TextDecoder().decode(dv.slice(13, 13 + hlen)));
     const body = dv.slice(13 + hlen);
