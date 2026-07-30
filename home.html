@@ -264,27 +264,66 @@ main [data-page]{display:none;}
 
   <!-- ============================================= TOOLS ============================================= -->
   <section data-page="shop">
-  <div class="lp-pad" style="max-width:1200px;margin:0 auto;padding:64px 40px 40px;">
+  <style>
+    .tool-row{display:grid;grid-template-columns:330px 1fr;gap:44px;align-items:start;}
+    .tool-desc-icon{width:64px;height:64px;border-radius:16px;object-fit:cover;border:1px solid rgba(238,228,218,.14);display:block;}
+    @media(max-width:820px){.tool-row{grid-template-columns:1fr;gap:28px;}}
+  </style>
+  <div class="lp-pad" style="max-width:1200px;margin:0 auto;padding:64px 40px 96px;">
     <p style="font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#C99654;font-weight:600;margin:0 0 18px;">Tools</p>
     <h1 style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(3rem,7vw,5.4rem);line-height:.9;letter-spacing:-.03em;margin:0 0 20px;">MusicaGuide</h1>
     <p style="font-size:16px;line-height:1.7;color:#c9c2b8;max-width:52ch;margin:0 0 44px;">The first Léo Sol product. Built for music lovers and people trying to make something.</p>
-    <div class="lp-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
-      
+
+    <div class="tool-row" style="margin:0 0 80px;">
+      <div class="h14" style="border-radius:16px;overflow:hidden;background:rgba(238,228,218,.04);border:1px solid rgba(238,228,218,.1);transition:transform .35s ease,border-color .35s ease;">
+        <div style="position:relative;aspect-ratio:1;background:#2a2829;display:flex;align-items:center;justify-content:center;">
+          <img src="shared/MusicaGuideIcon.jpg" alt="MusicaGuide app icon" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+          <span style="position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#ECA97E;background:rgba(37,36,38,.72);border:1px solid currentColor;border-radius:100px;padding:4px 10px;backdrop-filter:blur(8px);">Live</span>
+        </div>
+        <div style="padding:18px 18px 22px;">
+          <h3 style="font-size:15.5px;font-weight:500;color:#EEE4DA;margin:0 0 5px;">MusicaGuide</h3>
+          <p style="font-size:12.5px;line-height:1.5;color:#93a39c;margin:0 0 14px;">Find your taste, shape your ideas, and get unstuck when the song will not talk back.</p>
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#C99654;">MVP</span>
+            <a href="musicaguide-product-page.html" style="text-decoration:none;font-size:12px;color:#EEE4DA;border:1px solid rgba(238,228,218,.22);border-radius:100px;padding:7px 15px;">Open ↗</a>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <img src="shared/MusicaGuideIcon.jpg" alt="MusicaGuide icon" class="tool-desc-icon" style="margin:0 0 20px;" />
+        <p style="font-size:16px;line-height:1.75;color:#c9c2b8;max-width:56ch;margin:0 0 18px;">MusicaGuide sits inside your DAW and tells you what you are actually doing while you make music. It is for the moment the song stops talking back and you are not sure of the next move.</p>
+        <p style="font-size:16px;line-height:1.75;color:#c9c2b8;max-width:56ch;margin:0 0 26px;">Ask it anything in plain words, keep your hands on the work, and learn the why as you go. You bring your own key and your audio never leaves your machine.</p>
+        <a href="musicaguide-product-page.html" style="text-decoration:none;font-size:13.5px;letter-spacing:.02em;color:#252426;background:#ECA97E;border-radius:100px;padding:13px 26px;font-weight:500;">Open MusicaGuide ↗</a>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid rgba(238,228,218,.1);padding-top:60px;">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1;letter-spacing:-.02em;margin:0 0 16px;">SetCheck</h2>
+      <p style="font-size:16px;line-height:1.7;color:#c9c2b8;max-width:52ch;margin:0 0 40px;">Send a track to one person. Nothing goes missing.</p>
+      <div class="tool-row">
         <div class="h14" style="border-radius:16px;overflow:hidden;background:rgba(238,228,218,.04);border:1px solid rgba(238,228,218,.1);transition:transform .35s ease,border-color .35s ease;">
-          <div style="position:relative;aspect-ratio:1;background:repeating-linear-gradient(135deg, rgba(238,228,218,.06) 0 11px, rgba(238,228,218,.02) 11px 22px), #2a2829;display:flex;align-items:center;justify-content:center;">
-            <img src="shared/leo_sol_mark_reversed_light.png" alt="" aria-hidden="true" style="width:45%;opacity:.18;" />
-            <span style="position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#ECA97E;border:1px solid currentColor;border-radius:100px;padding:4px 10px;">Live</span>
+          <div style="position:relative;aspect-ratio:1;background:radial-gradient(120% 120% at 20% 0%, #2f2b30, #201f21);display:flex;align-items:center;justify-content:center;">
+            <img src="shared/setcheck-icon.png" alt="SetCheck app icon" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;" />
+            <span style="position:absolute;top:12px;left:12px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:#A8BDB6;background:rgba(37,36,38,.72);border:1px solid currentColor;border-radius:100px;padding:4px 10px;backdrop-filter:blur(8px);">New</span>
           </div>
           <div style="padding:18px 18px 22px;">
-            <h3 style="font-size:15.5px;font-weight:500;color:#EEE4DA;margin:0 0 5px;">MusicaGuide</h3>
-            <p style="font-size:12.5px;line-height:1.5;color:#93a39c;margin:0 0 14px;">Find your taste, shape your ideas, and get unstuck when the song will not talk back.</p>
+            <h3 style="font-size:15.5px;font-weight:500;color:#EEE4DA;margin:0 0 5px;">SetCheck</h3>
+            <p style="font-size:12.5px;line-height:1.5;color:#93a39c;margin:0 0 14px;">Send a track. Nothing goes missing.</p>
             <div style="display:flex;align-items:center;justify-content:space-between;">
-              <span style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#C99654;">MVP</span>
-              <a href="musicaguide-product-page.html" style="text-decoration:none;font-size:12px;color:#EEE4DA;border:1px solid rgba(238,228,218,.22);border-radius:100px;padding:7px 15px;">Open ↗</a>
+              <span style="font-family:'Cormorant Garamond',serif;font-size:20px;color:#C99654;">Tool</span>
+              <a href="/setcheck" style="text-decoration:none;font-size:12px;color:#EEE4DA;border:1px solid rgba(238,228,218,.22);border-radius:100px;padding:7px 15px;">Open ↗</a>
             </div>
           </div>
         </div>
-      
+
+        <div>
+          <img src="shared/setcheck-icon.png" alt="SetCheck icon" class="tool-desc-icon" style="margin:0 0 20px;" />
+          <p style="font-size:16px;line-height:1.75;color:#c9c2b8;max-width:56ch;margin:0 0 18px;">SetCheck is the private way to send a track to one specific person. It locks the file on your device before it ever leaves, so nobody in the middle can open it.</p>
+          <p style="font-size:16px;line-height:1.75;color:#c9c2b8;max-width:56ch;margin:0 0 26px;">The person you send to just clicks a link and it opens in their browser. No account, no app, nothing to figure out. Made for sharing something unfinished with someone you trust.</p>
+          <a href="/setcheck" style="text-decoration:none;font-size:13.5px;letter-spacing:.02em;color:#EEE4DA;border:1px solid rgba(238,228,218,.28);border-radius:100px;padding:13px 26px;">Open SetCheck ↗</a>
+        </div>
+      </div>
     </div>
   </div>
   </section>
@@ -326,7 +365,6 @@ main [data-page]{display:none;}
           <img src="shared/leo_sol_mark_reversed_light.png" alt="" aria-hidden="true" style="width:30px;height:30px;object-fit:contain;" />
           <span style="font-family:'Cormorant Garamond',serif;font-size:26px;color:#EEE4DA;line-height:1;">Léo Sol Products</span>
         </a>
-        <p style="font-size:13px;letter-spacing:.02em;color:#93a39c;margin:12px 0 0;">Built by hand, by Léo Sol</p>
         <a class="h27" href="https://léosol.com/" style="display:inline-block;text-decoration:none;font-size:12.5px;color:#A8BDB6;margin-top:22px;border-bottom:1px solid rgba(168,189,182,.35);padding-bottom:2px;">Back to Artist · léosol.com ↗</a>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;">
