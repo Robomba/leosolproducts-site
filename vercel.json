@@ -53,6 +53,10 @@
       "destination": "/setcheck.html"
     },
     {
+      "source": "/musicaguide",
+      "destination": "/musicaguide-product-page.html"
+    },
+    {
       "source": "/open",
       "destination": "/open.html"
     },
@@ -95,6 +99,13 @@
         }
       ],
       "destination": "/artist-site/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/musicaguide-product-page.html",
+      "destination": "/musicaguide",
+      "permanent": true
     }
   ]
 }
