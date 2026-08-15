@@ -111,12 +111,41 @@ if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
 (async () => {
   // link: https://open.<domain>/#<id>.<secret>   blobs at STORE/<id>.sealed + <id>.json
   // manual mode link: #file.<secret> — the user drops the encrypted file onto this page.
-  const STORE = window.SETCHECK_STORE || 'https://pub-ce67196b0b65467394bc7458f1189ca3.r2.dev';
   const $ = id => document.getElementById(id);
   const setPct = p => { $('bar').style.display='block'; $('barFill').style.width = Math.max(0,Math.min(100,p)) + '%'; };
   const frag = location.hash.slice(1);
-  const [id, secret] = frag.split('.');
+  // Fragment: <id>.<secret>[.s<base64url(storageBase)>]
+  // The sender's storage location rides in the link, so this page hardcodes nobody's bucket and
+  // works for every user. (Fragments are never transmitted to a server.)
+  const parts = frag.split('.');
+  const id = parts[0], secret = parts[1];
+  let STORE = window.SETCHECK_STORE || null;
+  if (!STORE && parts[2] && parts[2][0] === 's') {
+    try {
+      const b = parts[2].slice(1).replace(/-/g,'+').replace(/_/g,'/');
+      STORE = atob(b.padEnd(Math.ceil(b.length/4)*4,'=')).replace(/\/$/,'');
+    } catch (e) {}
+  }
   if (!id || !secret) { $('sub').textContent = 'This link is incomplete — ask the sender to re-copy it.'; return; }
+  // Hardening: take the key out of the address bar as soon as it is read, so it can't leak via
+  // screenshots, shoulder-surfing, history, or a copied URL. It stays only in this page's memory.
+  const RELINK = location.href;                       // kept in memory for the app-handoff below
+  try { history.replaceState(null, '', location.pathname + location.search); } catch {}
+
+  // If the SetCheck app is running on this machine, hand the link straight to it:
+  // the app rebuilds the whole project into a folder you choose (better than a raw .zip).
+  // Falls through to in-browser decrypt for anyone without the app.
+  try {
+    const probe = await Promise.race([
+      fetch('http://127.0.0.1:8092/api/how', { mode: 'no-cors' }).then(() => true).catch(() => false),
+      new Promise(r => setTimeout(() => r(false), 900)),
+    ]);
+    if (probe) {
+      $('sub').textContent = 'Opening in the SetCheck app…';
+      location.replace('http://127.0.0.1:8092/#open=' + encodeURIComponent(RELINK));
+      return;
+    }
+  } catch {}
 
   async function saveBytes(getParts, suggestedName) {
     // True streaming save where supported (Chromium): write chunks straight to disk.
@@ -169,6 +198,11 @@ if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
   }
 
   // ---- hosted mode: fetch from the sender's storage ----
+  if (!STORE) {
+    $('title').textContent = 'This link needs the SetCheck app';
+    $('sub').textContent = 'It does not say where the file is stored. Ask the sender to resend it, or open it in the SetCheck app.';
+    return;
+  }
   let meta = null;
   try { meta = await (await fetch(`${STORE}/${id}.json`)).json(); } catch {}
   if (meta) {
