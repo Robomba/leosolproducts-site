@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SetCheck Privacy — Léo Sol Products</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#252426;--fg:#EEE4DA;--mut:#A6988B;--line:rgba(238,228,218,.14);--gold:#C99654;--peach:#ECA97E}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:400 16px/1.75 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px 96px}
+  a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+  a.back{color:var(--mut);font-size:14px;letter-spacing:.02em}
+  h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:46px;letter-spacing:.005em;margin:20px 0 6px}
+  .upd{color:var(--mut);font-size:14px;margin-bottom:34px}
+  h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:26px;margin:38px 0 10px;color:#F3ECE3}
+  p,li{color:#D7CCBF}.mut{color:var(--mut)}
+  ul{margin:10px 0 10px 22px}li{margin-bottom:8px}
+  b{color:#F3ECE3;font-weight:600}
+  .note{background:rgba(238,228,218,.04);border:1px solid var(--line);border-left:3px solid var(--peach);border-radius:10px;padding:14px 16px;color:var(--mut);font-size:14px;margin:22px 0}
+  .note b{color:var(--fg)}
+  hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+</style>
+</head>
+<body><div class="wrap">
+  <p style="margin-bottom:22px;font-size:13px;">
+    <a href="/setcheck" style="color:var(--peach);text-decoration:none;">&larr; SetCheck</a>
+    &nbsp;·&nbsp; <a href="/setcheck-privacy" style="color:var(--mut);text-decoration:none;">Privacy</a>
+    &nbsp;·&nbsp; <a href="/setcheck-eula" style="color:var(--mut);text-decoration:none;">Licence</a>
+    &nbsp;·&nbsp; <a href="/security" style="color:var(--mut);text-decoration:none;">Security</a>
+  </p>
+<h1>SetCheck Privacy Notice</h1>
+
+<p><strong>Effective:</strong> [EFFECTIVE DATE] · <strong>Last updated:</strong> 15 August 2026 · <strong>Version:</strong> 2.0 (draft — not published)</p>
+
+<h2>1. Who we are</h2>
+<p>SetCheck is made by <strong>Léo Sol</strong> (Rohan Kaila), Charlottesville, Virginia, United States.</p>
+<p>[If/when Léo Sol LLC is formed, replace with: Léo Sol LLC, a Virginia limited liability company.]</p>
+
+<ul>
+<li><strong>Contact:</strong> rosinkai888@gmail.com</li>
+<li><strong>Postal:</strong> [BUSINESS ADDRESS]</li>
+</ul>
+
+<p>SetCheck is free. There is no account, no subscription, and nothing to buy.</p>
+
+<h2>2. The short version</h2>
+<p>Your music never reaches us. SetCheck encrypts your project <strong>on your computer</strong> before anything</p>
+<p>leaves it, and the encrypted file goes to storage <strong>you</strong> control — or to no cloud at all. We operate</p>
+<p>no servers that hold your files, and we have no way to read them.</p>
+
+<h2>3. What SetCheck does with your files</h2>
+<ul>
+<li><strong>Encryption happens locally.</strong> Your project is packaged and encrypted with AES-256-GCM on your</li>
+</ul>
+<p>  machine before any upload.</p>
+<ul>
+<li><strong>We never receive:</strong> your project files, the encrypted package, your encryption keys, your PINs,</li>
+</ul>
+<p>  your storage credentials, your identity private key, your contacts, your settings, your plugin</p>
+<p>  scan results, or any telemetry. None of it is sent to us, because there is nowhere to send it.</p>
+<ul>
+<li><strong>Where the encrypted file goes:</strong> either (a) a cloud storage bucket <strong>you</strong> own and configure</li>
+</ul>
+<p>  (e.g. your own Cloudflare R2 or S3 account), or (b) nowhere — "no-cloud mode" leaves an encrypted</p>
+<p>  file on your disk that you share however you like. We do not control, access, or pay for that storage.</p>
+<ul>
+<li><strong>How the recipient opens it.</strong> The <code>/open</code> page decrypts the file <strong>in the recipient's browser</strong>.</li>
+</ul>
+<p>  The decryption key travels in the URL <strong>fragment</strong> (the part after <code>#</code>), which by design</p>
+<p>  (<a href="https://www.rfc-editor.org/rfc/rfc3986#section-3.5">RFC 3986 §3.5</a>) is <strong>not transmitted</strong> to any</p>
+<p>  web server — not ours, not anyone's.</p>
+<ul>
+<li><strong>Your original project is never modified.</strong> SetCheck reads it and packages a copy.</li>
+</ul>
+
+<h3>The one thing that is not encrypted</h3>
+<p>Alongside the encrypted package, a small "sidecar" record is stored <strong>in your own storage</strong> so links</p>
+<p>can expire, be revoked, and show a friendly title before decryption. It contains: a random delivery</p>
+<p>ID, timestamps and expiry, a download counter, a flag for whether a PIN is required, and the</p>
+<p><strong>sender name and project name you typed</strong>.</p>
+<p><strong>Do not type sensitive information into the sender-name or project-name fields.</strong></p>
+
+<h2>4. What we actually receive</h2>
+<ul class="tbl">
+<li>Data — Why — Retention</li>
+<li><strong>Web-server logs</strong> for <code>leosolproducts.com</code> and the <code>/open</code> page: IP address, timestamp, user-agent, path, response code — Serving the site and basic security — 7–30 days</li>
+<li><strong>Support emails</strong> you choose to send us — Answering you — Until resolved + 12 months</li>
+<li><strong>Update checks</strong> (if enabled in a future version): app version + OS version, no stable device ID — Telling you a new version exists — Not stored beyond the request logs</li>
+</ul>
+
+<p>That is the complete list.</p>
+
+<h2>5. What we do not do</h2>
+<ul>
+<li>No accounts, no registration, no login.</li>
+<li>No advertising, no tracking pixels, no third-party analytics, no cookies beyond strictly necessary.</li>
+<li>No profiling and no automated decision-making.</li>
+<li><strong>No sale or sharing of personal information</strong> (as those terms are used in the CCPA/CPRA). We have</li>
+</ul>
+<p>  never sold or shared personal information and have no mechanism to.</p>
+<ul>
+<li>No training of AI models on your data.</li>
+<li>No selling, renting, or trading of any data to anyone.</li>
+</ul>
+
+<h2>6. Legal bases (GDPR)</h2>
+<ul>
+<li><strong>Serving the website and the software:</strong> our legitimate interest in operating and distributing it</li>
+</ul>
+<p>  (Art. 6(1)(f)).</p>
+<ul>
+<li><strong>Security logging:</strong> legitimate interest in keeping the service available and secure (Art. 6(1)(f)).</li>
+<li><strong>Support emails:</strong> your consent in writing to us, plus our legitimate interest in replying.</li>
+</ul>
+
+<p>We do not rely on consent for cookies/analytics because we don't run any.</p>
+
+<h2>7. Your rights</h2>
+<p>Wherever you are, you can ask us to access, correct, delete, or export the little we hold, or object</p>
+<p>to or restrict our processing. Email <strong>rosinkai888@gmail.com</strong>.</p>
+
+<p>Because we hold no user content and no account data, in practice this usually concerns support email</p>
+<p>threads and short-lived server logs.</p>
+
+<ul>
+<li><strong>EEA/UK:</strong> you can lodge a complaint with your supervisory authority.</li>
+<li><strong>California:</strong> you have rights to know, delete, correct, and to opt out of sale/sharing — we don't</li>
+</ul>
+<p>  sell or share, so there is nothing to opt out of. We will not discriminate against you for exercising rights.</p>
+
+<h2>8. Children</h2>
+<p>SetCheck is not directed to children under 13 and we do not knowingly collect their personal</p>
+<p>information. If you believe a child has contacted us, email <strong>rosinkai888@gmail.com</strong> and we will delete it.</p>
+
+<h2>9. International transfers</h2>
+<p>We are based in the United States, so the limited data described in §4 is processed in the US. If you</p>
+<p>are in the EEA or UK, that is a third-country transfer. Given how little data is involved — ephemeral</p>
+<p>logs and voluntary emails, no content, no keys, no profiling — we rely on that minimisation as the</p>
+<p>principal safeguard. If we ever add processing that changes this, we will update this notice first.</p>
+
+<h2>10. Service providers</h2>
+<ul>
+<li><strong>Website/hosting:</strong> [HOSTING PROVIDER] — serves the pages and produces the logs in §4.</li>
+<li><strong>Email:</strong> [EMAIL PROVIDER] — carries support email.</li>
+<li><strong>Your storage provider</strong> (e.g. Cloudflare R2) is <strong>yours</strong>, not ours; your relationship and their</li>
+</ul>
+<p>  privacy terms govern it. They hold only ciphertext plus the sidecar in §3.</p>
+
+<h2>11. Security</h2>
+<p>End-to-end encryption with AES-256-GCM; PIN-protected links additionally derive keys with</p>
+<p>PBKDF2-SHA256 (310,000 iterations); recipient-locked deliveries use X25519 key agreement with</p>
+<p>HKDF-SHA256. <strong>There is no key escrow.</strong> If you lose a link or PIN, nobody — including us — can</p>
+<p>recover that delivery. Report security issues to <strong>rosinkai888@gmail.com</strong> (see our security.txt).</p>
+
+<h2>12. Changes</h2>
+<p>We will post updates here with a new "last updated" date, and note material changes on the site.</p>
+
+<p>*This notice describes how SetCheck actually works. If the software and this notice ever disagree, we</p>
+<p>treat that as a bug to fix.*</p>
+</div></body>
+</html>

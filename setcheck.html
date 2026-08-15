@@ -424,7 +424,7 @@
           <h1>Send a track.<br><span style="color:var(--muted);">Nothing goes missing.</span></h1>
           <p class="hero-copy">Sending a project usually breaks the same three ways: missing samples, plugins they don&#8217;t own, and recordings that quietly vanish. SetCheck checks your session before it leaves, then hands your collaborator one encrypted link that just opens, no account, no install on their end. Private end-to-end, only the people you choose.</p>
           <div class="actions">
-            <span class="button primary" aria-disabled="true" style="opacity:.55;cursor:default;pointer-events:none;">Mac app, coming soon</span>
+            <a class="button primary" href="#download">Download for Mac</a>
             <a class="button secondary" href="#how">How it works</a>
           </div>
           <p style="margin-top:14px;font-size:12.5px;color:var(--faint);">For Ableton Live, Logic Pro, and FL Studio. The Mac app is in the works.</p>
@@ -483,18 +483,74 @@
         <p style="max-width:70ch;color:var(--soft);">Everything is end-to-end encrypted before it leaves your computer, so it&#8217;s readable only by the people you send it to. We keep the encrypted file and nothing we don&#8217;t need, no passwords, no listening, no snooping. Even we can&#8217;t open your projects. Links expire on their own, and you can kill any link the moment you want it gone.</p>
       </div>
     </section>
+    <!-- DOWNLOAD + legal gate -->
+    <section class="section" id="download">
+      <div class="wrap">
+        <p class="eyebrow">Download</p>
+        <h2 class="section-title" style="font-size:clamp(2.1rem,4vw,3.4rem);">Free. No account, nothing to buy.</h2>
+
+        <div class="panel" style="max-width:760px;">
+          <p style="color:var(--soft);margin-top:0;">SetCheck for macOS (Apple Silicon and Intel). Ableton Live, Logic Pro, and FL Studio.
+          Your collaborator needs nothing — they open a link in their browser.</p>
+
+          <p style="font-size:13px;color:var(--soft);">
+            By downloading you agree to the <a href="/setcheck-eula" style="color:var(--peach);">End User License Agreement</a>
+            and the <a href="/setcheck-privacy" style="color:var(--peach);">Privacy Notice</a>.
+            <strong>SetCheck has no key escrow</strong> — if a link or PIN is lost, that delivery cannot be recovered by anyone, including us.
+          </p>
+
+          <div style="border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin:18px 0;background:var(--surface);">
+            <p style="margin:0 0 10px;font-size:12.5px;color:var(--faint);line-height:1.6;">
+              <strong style="color:var(--soft);">Export notice.</strong> SetCheck contains encryption and is classified under
+              <strong>ECCN 5D992.c</strong>, distributed under License Exception ENC (15 CFR §740.17(b)(1)). It may not be
+              exported or re-exported to Cuba, Iran, North Korea, Syria, or the covered regions of Ukraine, or to anyone on a
+              U.S. restricted-party list.
+            </p>
+            <label style="display:flex;gap:10px;align-items:flex-start;font-size:12.5px;color:var(--soft);cursor:pointer;">
+              <input type="checkbox" id="exportOk" style="margin-top:3px;">
+              <span>I confirm I am not located in, and will not export this software to, those destinations, and I am not on any U.S. restricted-party list.</span>
+            </label>
+          </div>
+
+          <div class="actions">
+            <a class="button primary" id="dlBtn" href="/downloads/SetCheck.pkg" download
+               aria-disabled="true" style="opacity:.5;pointer-events:none;">Download SetCheck for Mac</a>
+          </div>
+          <p style="margin-top:12px;font-size:12px;color:var(--faint);">
+            Signed and notarized by Apple. Windows version planned.
+            Security contact: <a href="/security" style="color:var(--muted);">security policy</a>.
+          </p>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
     <div class="wrap">
       <div style="display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;">
-        <span>© 2026 Léo Sol Products · SetCheck</span>
-        <span>Made by someone who got tired of broken sends</span>
+        <span>© 2026 Léo Sol Products · SetCheck&trade;</span>
+        <span style="display:flex;gap:16px;flex-wrap:wrap;">
+          <a href="/setcheck-privacy" style="color:var(--muted);text-decoration:none;">Privacy</a>
+          <a href="/setcheck-eula" style="color:var(--muted);text-decoration:none;">Licence</a>
+          <a href="/security" style="color:var(--muted);text-decoration:none;">Security</a>
+          <a href="mailto:rosinkai888@gmail.com" style="color:var(--muted);text-decoration:none;">Contact</a>
+        </span>
       </div>
     </div>
   </footer>
 
 <script>
+  // Export click-through: the download stays disabled until the box is ticked.
+  (function(){
+    var box = document.getElementById('exportOk');
+    var btn = document.getElementById('dlBtn');
+    if (!box || !btn) return;
+    box.checked = false;                       // never pre-checked
+    box.addEventListener('change', function(){
+      if (box.checked) { btn.style.opacity = '1'; btn.style.pointerEvents = 'auto'; btn.removeAttribute('aria-disabled'); }
+      else { btn.style.opacity = '.5'; btn.style.pointerEvents = 'none'; btn.setAttribute('aria-disabled','true'); }
+    });
+  })();
   (function(){
     var body = document.body;
     var toggle = document.querySelector('[data-theme-toggle]');

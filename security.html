@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security — Léo Sol Products</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#252426;--fg:#EEE4DA;--mut:#A6988B;--line:rgba(238,228,218,.14);--gold:#C99654;--peach:#ECA97E}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--fg);font:400 16px/1.75 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:64px 24px 96px}
+  a{color:var(--gold);text-decoration:none} a:hover{text-decoration:underline}
+  a.back{color:var(--mut);font-size:14px;letter-spacing:.02em}
+  h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:46px;letter-spacing:.005em;margin:20px 0 6px}
+  .upd{color:var(--mut);font-size:14px;margin-bottom:34px}
+  h2{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:26px;margin:38px 0 10px;color:#F3ECE3}
+  p,li{color:#D7CCBF}.mut{color:var(--mut)}
+  ul{margin:10px 0 10px 22px}li{margin-bottom:8px}
+  b{color:#F3ECE3;font-weight:600}
+  .note{background:rgba(238,228,218,.04);border:1px solid var(--line);border-left:3px solid var(--peach);border-radius:10px;padding:14px 16px;color:var(--mut);font-size:14px;margin:22px 0}
+  .note b{color:var(--fg)}
+  hr{border:0;border-top:1px solid var(--line);margin:44px 0}
+</style>
+</head>
+<body><div class="wrap">
+  <p style="margin-bottom:22px;font-size:13px;">
+    <a href="/setcheck" style="color:var(--peach);text-decoration:none;">&larr; SetCheck</a>
+    &nbsp;·&nbsp; <a href="/setcheck-privacy" style="color:var(--mut);text-decoration:none;">Privacy</a>
+    &nbsp;·&nbsp; <a href="/setcheck-eula" style="color:var(--mut);text-decoration:none;">Licence</a>
+    &nbsp;·&nbsp; <a href="/security" style="color:var(--mut);text-decoration:none;">Security</a>
+  </p>
+<h1>SetCheck — Security Policy</h1>
+
+<p><strong>Last updated:</strong> 15 August 2026 · Contact: <strong>rosinkai888@gmail.com</strong></p>
+
+<h2>Reporting a vulnerability</h2>
+<p>Email <strong>rosinkai888@gmail.com</strong> with "SECURITY" in the subject. Please include:</p>
+<ul>
+<li>what you found and where (component, version, URL),</li>
+<li>how to reproduce it,</li>
+<li>what an attacker could achieve.</li>
+</ul>
+
+<p>You'll get an acknowledgment within <strong>5 business days</strong> and an assessment within <strong>14 days</strong>.</p>
+<p>SetCheck is maintained by one person, so please allow reasonable time for a fix.</p>
+
+<h2>Coordinated disclosure</h2>
+<p>We ask for <strong>90 days</strong> before public disclosure, or until a fix ships — whichever comes first. If a</p>
+<p>fix is going to take longer, we'll say so and agree a date with you. If a vulnerability is being</p>
+<p>actively exploited, we'll move faster and say so publicly.</p>
+
+<h2>Safe harbour</h2>
+<p>We will not pursue legal action for good-faith security research that:</p>
+<ul>
+<li>respects user privacy and does not access, modify, or destroy other people's data,</li>
+<li>does not degrade the service (no DoS, no spam, no social engineering of users or third parties),</li>
+<li>stays within systems we control (our website and the software itself — <strong>not</strong> users' storage buckets,</li>
+</ul>
+<p>  which belong to them and are out of scope),</p>
+<ul>
+<li>gives us reasonable time to fix before disclosure.</li>
+</ul>
+
+<p>We don't currently run a paid bug bounty. Credit in the acknowledgments is offered if you want it.</p>
+
+<h2>Scope</h2>
+<p><strong>In scope:</strong> the SetCheck application, the packaging/encryption engine, the <code>/open</code> recipient page,</p>
+<p>and <code>leosolproducts.com</code> pages that serve them.</p>
+<p><strong>Out of scope:</strong> users' own cloud storage accounts and credentials, third-party services, physical</p>
+<p>attacks, and issues requiring a fully compromised local machine.</p>
+
+<h2>Design notes for reviewers</h2>
+<ul>
+<li>Content is encrypted client-side with <strong>AES-256-GCM</strong>, chunked, each chunk authenticated with a</li>
+</ul>
+<p>  final-chunk flag in the AAD (truncation/extension detection).</p>
+<ul>
+<li>Link secrets are 128-bit random; PIN-protected deliveries derive keys with **PBKDF2-HMAC-SHA256,</li>
+</ul>
+<p>  310,000 iterations**.</p>
+<ul>
+<li>Recipient-locked deliveries use <strong>X25519</strong> ECDH with <strong>HKDF-SHA256</strong> key wrapping.</li>
+<li>The decryption key travels in the URL <strong>fragment</strong> and is never sent to a server.</li>
+<li><strong>No key escrow.</strong> We cannot decrypt user content; that is intentional.</li>
+<li>Encrypted packages and their metadata sidecar live in <strong>the user's own</strong> storage.</li>
+</ul>
+
+<p>Known and accepted: the metadata sidecar (delivery ID, timestamps, counters, PIN-exists flag, and the</p>
+<p>user-typed sender/project names) is stored <strong>unencrypted</strong> so links can expire and be revoked. Users</p>
+<p>are warned not to put sensitive information in those fields.</p>
+
+<h2>Security contact record</h2>
+<p>See <code>/.well-known/security.txt</code> (<a href="https://www.rfc-editor.org/rfc/rfc9116">RFC 9116</a>).</p>
+</div></body>
+</html>
