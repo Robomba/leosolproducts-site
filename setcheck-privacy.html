@@ -34,15 +34,16 @@
   </p>
 <h1>SetCheck Privacy Notice</h1>
 
-<p><strong>Effective:</strong> [EFFECTIVE DATE] · <strong>Last updated:</strong> 15 August 2026 · <strong>Version:</strong> 2.0 (draft — not published)</p>
+<p><strong>Effective:</strong> 15 August 2026 · <strong>Last updated:</strong> 15 August 2026 · <strong>Version:</strong> 1.0</p>
 
 <h2>1. Who we are</h2>
-<p>SetCheck is made by <strong>Léo Sol</strong> (Rohan Kaila), Charlottesville, Virginia, United States.</p>
-<p>[If/when Léo Sol LLC is formed, replace with: Léo Sol LLC, a Virginia limited liability company.]</p>
+<p>SetCheck is made by <strong>Rohan Kaila</strong>, trading as <strong>Léo Sol</strong>, a sole proprietor based in</p>
+<p>Charlottesville, Virginia, United States. Rohan Kaila is the data controller for the limited personal</p>
+<p>data described below.</p>
 
 <ul>
-<li><strong>Contact:</strong> rosinkai888@gmail.com</li>
-<li><strong>Postal:</strong> [BUSINESS ADDRESS]</li>
+<li><strong>Contact for anything in this notice, including privacy requests:</strong> rosinkai888@gmail.com</li>
+<li>A postal address is available on request by emailing that address.</li>
 </ul>
 
 <p>SetCheck is free. There is no account, no subscription, and nothing to buy.</p>
@@ -50,7 +51,7 @@
 <h2>2. The short version</h2>
 <p>Your music never reaches us. SetCheck encrypts your project <strong>on your computer</strong> before anything</p>
 <p>leaves it, and the encrypted file goes to storage <strong>you</strong> control — or to no cloud at all. We operate</p>
-<p>no servers that hold your files, and we have no way to read them.</p>
+<p>no servers that hold your files, and we have no technical ability to read them.</p>
 
 <h2>3. What SetCheck does with your files</h2>
 <ul>
@@ -60,13 +61,14 @@
 <ul>
 <li><strong>We never receive:</strong> your project files, the encrypted package, your encryption keys, your PINs,</li>
 </ul>
-<p>  your storage credentials, your identity private key, your contacts, your settings, your plugin</p>
-<p>  scan results, or any telemetry. None of it is sent to us, because there is nowhere to send it.</p>
+<p>  your storage credentials, your identity private key, your contacts, your settings, your plugin scan</p>
+<p>  results, or any telemetry. None of it is sent to us, because there is nowhere to send it.</p>
 <ul>
-<li><strong>Where the encrypted file goes:</strong> either (a) a cloud storage bucket <strong>you</strong> own and configure</li>
+<li><strong>Where the encrypted file goes:</strong> either (a) a cloud storage bucket <strong>you</strong> own and configure (for</li>
 </ul>
-<p>  (e.g. your own Cloudflare R2 or S3 account), or (b) nowhere — "no-cloud mode" leaves an encrypted</p>
-<p>  file on your disk that you share however you like. We do not control, access, or pay for that storage.</p>
+<p>  example your own Cloudflare R2 or Amazon S3 account), or (b) nowhere — "no-cloud mode" leaves an</p>
+<p>  encrypted file on your disk that you share however you like. We do not control, access, or pay for</p>
+<p>  that storage.</p>
 <ul>
 <li><strong>How the recipient opens it.</strong> The <code>/open</code> page decrypts the file <strong>in the recipient's browser</strong>.</li>
 </ul>
@@ -80,84 +82,103 @@
 <h3>The one thing that is not encrypted</h3>
 <p>Alongside the encrypted package, a small "sidecar" record is stored <strong>in your own storage</strong> so links</p>
 <p>can expire, be revoked, and show a friendly title before decryption. It contains: a random delivery</p>
-<p>ID, timestamps and expiry, a download counter, a flag for whether a PIN is required, and the</p>
-<p><strong>sender name and project name you typed</strong>.</p>
+<p>ID, timestamps and expiry, a download counter, a flag for whether a PIN is required, and the **sender</p>
+<p>name and project name you typed**.</p>
 <p><strong>Do not type sensitive information into the sender-name or project-name fields.</strong></p>
 
 <h2>4. What we actually receive</h2>
 <ul class="tbl">
 <li>Data — Why — Retention</li>
-<li><strong>Web-server logs</strong> for <code>leosolproducts.com</code> and the <code>/open</code> page: IP address, timestamp, user-agent, path, response code — Serving the site and basic security — 7–30 days</li>
-<li><strong>Support emails</strong> you choose to send us — Answering you — Until resolved + 12 months</li>
-<li><strong>Update checks</strong> (if enabled in a future version): app version + OS version, no stable device ID — Telling you a new version exists — Not stored beyond the request logs</li>
+<li><strong>Web-server logs</strong> for leosolproducts.com and the <code>/open</code> page: IP address, timestamp, user-agent, path, response code — Serving the site and basic security — Up to 30 days</li>
+<li><strong>Support and privacy emails</strong> you choose to send us — Answering you — Until the matter is resolved, plus 12 months</li>
 </ul>
 
-<p>That is the complete list.</p>
+<p>That is the complete list. SetCheck itself sends us nothing — there is no telemetry, no crash</p>
+<p>reporting, and no update-check service in this version. If we ever add one, we will update this</p>
+<p>notice before shipping it.</p>
 
 <h2>5. What we do not do</h2>
 <ul>
 <li>No accounts, no registration, no login.</li>
-<li>No advertising, no tracking pixels, no third-party analytics, no cookies beyond strictly necessary.</li>
+<li>No advertising, no tracking pixels, no third-party analytics, no cookies beyond those strictly</li>
+</ul>
+<p>  necessary to serve the site.</p>
+<ul>
 <li>No profiling and no automated decision-making.</li>
 <li><strong>No sale or sharing of personal information</strong> (as those terms are used in the CCPA/CPRA). We have</li>
 </ul>
-<p>  never sold or shared personal information and have no mechanism to.</p>
+<p>  never sold or shared personal information and have no mechanism to do so.</p>
 <ul>
 <li>No training of AI models on your data.</li>
 <li>No selling, renting, or trading of any data to anyone.</li>
 </ul>
 
-<h2>6. Legal bases (GDPR)</h2>
+<h2>6. Legal bases (UK/EU GDPR)</h2>
 <ul>
-<li><strong>Serving the website and the software:</strong> our legitimate interest in operating and distributing it</li>
+<li><strong>Serving the website and distributing the software:</strong> our legitimate interest in operating and</li>
 </ul>
-<p>  (Art. 6(1)(f)).</p>
+<p>  distributing SetCheck (Art. 6(1)(f)).</p>
 <ul>
-<li><strong>Security logging:</strong> legitimate interest in keeping the service available and secure (Art. 6(1)(f)).</li>
-<li><strong>Support emails:</strong> your consent in writing to us, plus our legitimate interest in replying.</li>
+<li><strong>Security logging:</strong> our legitimate interest in keeping the service available and secure (Art. 6(1)(f)).</li>
+<li><strong>Support and privacy emails:</strong> your consent in writing to us, and our legitimate interest in replying.</li>
 </ul>
 
-<p>We do not rely on consent for cookies/analytics because we don't run any.</p>
+<p>We do not rely on consent for analytics or advertising cookies, because we run none.</p>
 
 <h2>7. Your rights</h2>
-<p>Wherever you are, you can ask us to access, correct, delete, or export the little we hold, or object</p>
-<p>to or restrict our processing. Email <strong>rosinkai888@gmail.com</strong>.</p>
+<p>Wherever you live, you can ask us to access, correct, delete, or export the limited data we hold, or</p>
+<p>object to or restrict our processing of it. Email <strong>rosinkai888@gmail.com</strong> and we will respond</p>
+<p>within 30 days.</p>
 
-<p>Because we hold no user content and no account data, in practice this usually concerns support email</p>
+<p>Because we hold no user content and no account data, in practice a request will concern support email</p>
 <p>threads and short-lived server logs.</p>
 
 <ul>
-<li><strong>EEA/UK:</strong> you can lodge a complaint with your supervisory authority.</li>
-<li><strong>California:</strong> you have rights to know, delete, correct, and to opt out of sale/sharing — we don't</li>
+<li><strong>EEA/UK:</strong> you may lodge a complaint with your local supervisory authority.</li>
+<li><strong>California:</strong> you have the right to know, delete, correct, and to opt out of sale or sharing. We</li>
 </ul>
-<p>  sell or share, so there is nothing to opt out of. We will not discriminate against you for exercising rights.</p>
+<p>  do not sell or share personal information, so there is nothing to opt out of. We will not</p>
+<p>  discriminate against you for exercising any right.</p>
 
 <h2>8. Children</h2>
-<p>SetCheck is not directed to children under 13 and we do not knowingly collect their personal</p>
-<p>information. If you believe a child has contacted us, email <strong>rosinkai888@gmail.com</strong> and we will delete it.</p>
+<p>SetCheck is not directed to children under 13 and we do not knowingly collect personal information</p>
+<p>from them. If you believe a child has sent us personal information, email <strong>rosinkai888@gmail.com</strong></p>
+<p>and we will delete it.</p>
 
 <h2>9. International transfers</h2>
-<p>We are based in the United States, so the limited data described in §4 is processed in the US. If you</p>
-<p>are in the EEA or UK, that is a third-country transfer. Given how little data is involved — ephemeral</p>
-<p>logs and voluntary emails, no content, no keys, no profiling — we rely on that minimisation as the</p>
-<p>principal safeguard. If we ever add processing that changes this, we will update this notice first.</p>
+<p>We are based in the United States, so the limited data in §4 is processed there. If you are in the</p>
+<p>EEA or UK, that is a transfer to a third country. Given how little data is involved — short-lived</p>
+<p>server logs and emails you choose to send, with no content, no keys, and no profiling — we rely on</p>
+<p>that data minimisation as the principal safeguard, together with our legitimate-interest basis. If we</p>
+<p>ever introduce processing that changes this picture, we will update this notice first.</p>
 
 <h2>10. Service providers</h2>
 <ul>
-<li><strong>Website/hosting:</strong> [HOSTING PROVIDER] — serves the pages and produces the logs in §4.</li>
-<li><strong>Email:</strong> [EMAIL PROVIDER] — carries support email.</li>
-<li><strong>Your storage provider</strong> (e.g. Cloudflare R2) is <strong>yours</strong>, not ours; your relationship and their</li>
+<li><strong>Website hosting: Vercel Inc.</strong> — serves leosolproducts.com and the <code>/open</code> page, and generates</li>
 </ul>
-<p>  privacy terms govern it. They hold only ciphertext plus the sidecar in §3.</p>
+<p>  the server logs described in §4.</p>
+<ul>
+<li><strong>Email: Google LLC (Gmail)</strong> — carries support and privacy email.</li>
+<li><strong>Your storage provider</strong> (for example Cloudflare, if you configure R2) is <strong>yours</strong>, not ours. Your</li>
+</ul>
+<p>  agreement and their privacy terms govern it. They hold only ciphertext plus the sidecar record in §3.</p>
 
 <h2>11. Security</h2>
-<p>End-to-end encryption with AES-256-GCM; PIN-protected links additionally derive keys with</p>
-<p>PBKDF2-SHA256 (310,000 iterations); recipient-locked deliveries use X25519 key agreement with</p>
-<p>HKDF-SHA256. <strong>There is no key escrow.</strong> If you lose a link or PIN, nobody — including us — can</p>
-<p>recover that delivery. Report security issues to <strong>rosinkai888@gmail.com</strong> (see our security.txt).</p>
+<p>Content is encrypted with AES-256-GCM in authenticated chunks. PIN-protected links additionally</p>
+<p>derive keys with PBKDF2-HMAC-SHA256 (310,000 iterations). Recipient-locked deliveries use X25519 key</p>
+<p>agreement with HKDF-SHA256. Deliveries can be signed so the recipient can verify who sent them.</p>
 
-<h2>12. Changes</h2>
-<p>We will post updates here with a new "last updated" date, and note material changes on the site.</p>
+<p><strong>There is no key escrow.</strong> If you lose a link or PIN, that delivery cannot be recovered by anyone,</p>
+<p>including us. Report security issues to <strong>rosinkai888@gmail.com</strong>; see our</p>
+<p><a href="https://www.leosolproducts.com/security">security policy</a> and</p>
+<p><a href="https://www.leosolproducts.com/.well-known/security.txt">security.txt</a>.</p>
+
+<h2>12. Changes to this notice</h2>
+<p>If we change this notice we will post the new version here with an updated date, and we will note</p>
+<p>material changes on the SetCheck page. Continued use after a change means you accept the updated notice.</p>
+
+<h2>13. Contact</h2>
+<p><strong>rosinkai888@gmail.com</strong> — Rohan Kaila, trading as Léo Sol, Charlottesville, Virginia, USA.</p>
 
 <p>*This notice describes how SetCheck actually works. If the software and this notice ever disagree, we</p>
 <p>treat that as a bug to fix.*</p>
