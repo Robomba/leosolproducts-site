@@ -435,8 +435,8 @@
             <span>Delivery preview</span>
           </div>
           <div class="chat">
-            <div class="bubble guide"><strong>Ro sent you &#8220;Late Night v3&#8221;</strong><br>Ableton Live &#183; end-to-end encrypted</div>
-            <div class="bubble answer">&#10003; opens clean, every sample resolved<br>&#10003; verified it really came from Ro<br>1 plugin you don&#8217;t have: <em>Serum</em> (that track is frozen for you)</div>
+            <div class="bubble guide"><strong>A collaborator sent you &#8220;Demo Mix v3&#8221;</strong><br>Ableton Live &#183; end-to-end encrypted</div>
+            <div class="bubble answer">&#10003; opens clean, every sample resolved<br>&#10003; verified it really came from them<br>1 plugin you don&#8217;t have: <em>Serum</em> (that track is frozen for you)</div>
             <div style="text-align:center;margin-top:8px;"><span class="button primary" style="pointer-events:none;">Download project</span></div>
           </div>
         </aside>
@@ -562,31 +562,6 @@
       });
     }
 
-    var form = document.querySelector('[data-chat-form]');
-    var input = document.querySelector('[data-chat-input]');
-    var log = document.querySelector('[data-chat-log]');
-    var answered = false;
-    var answerHTML = '<div class="bubble answer"><strong>Not the exact Frank session, but a “Lost”-inspired chain to chase that clean, close, floating vocal:</strong><ul><li><strong>Clean take first:</strong> keep the vocal intimate, dry, and not over-sung. The performance matters more than the plugins.</li><li><strong>Pitch + cleanup:</strong> light tuning, then subtract mud around the low-mids before boosting anything shiny.</li><li><strong>Compression:</strong> one smooth compressor for control, then a faster one catching peaks so the vocal sits still without feeling crushed.</li><li><strong>Tone:</strong> add a little top-end air, but keep it soft. Think expensive daylight, not crispy YouTube preset.</li><li><strong>Space:</strong> short room or plate tucked low, plus a delay you feel more than hear. Automate throws on the ends of lines.</li><li><strong>Final move:</strong> print a rough, walk away for ten minutes, then only fix what actually bothers you.</li></ul></div>';
-
-    if (form && input && log) {
-      form.addEventListener('submit', function(event){
-        event.preventDefault();
-        var text = input.value.trim() || "What’s the vocal chain for Frank Ocean’s ‘Lost’?";
-        if (!answered) {
-          var user = document.createElement('div');
-          user.className = 'bubble user';
-          user.textContent = text;
-          log.insertBefore(user, form);
-          form.insertAdjacentHTML('beforebegin', answerHTML);
-          answered = true;
-          input.value = '';
-          input.placeholder = 'Demo answered.';
-        } else {
-          input.value = '';
-          input.placeholder = 'Only one pregenerated answer in this preview.';
-        }
-      });
-    }
   })();
 </script>
 </body>
