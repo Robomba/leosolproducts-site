@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SetCheck — you've been sent a project</title>
+<title>setcheck — you've been sent a project</title>
 <style>
   :root{--bg:#252426;--card:#2e2d2f;--ink:#EEE4DA;--mut:#93a39c;--acc:#ECA97E;--gold:#C99654}
   *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Inter,sans-serif;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
@@ -15,6 +15,10 @@
   .err{color:#e08f8f;font-size:13px;margin-top:12px;display:none}
   .ok{color:#9fd0a9;font-size:13px;margin-top:12px;display:none}
   .fine{font-size:11px;color:var(--mut);margin-top:20px;line-height:1.5}
+  .dropzone{margin-top:18px;border:1.5px dashed rgba(238,228,218,.3);border-radius:12px;padding:22px;text-align:center;color:var(--mut);font-size:13px;display:none}
+  .dropzone.over{border-color:var(--acc);color:var(--ink)}
+  .bar{height:6px;border-radius:3px;background:rgba(238,228,218,.12);margin-top:16px;overflow:hidden;display:none}
+  .bar i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--acc),var(--gold));transition:width .2s}
 </style>
 </head>
 <body>
@@ -22,38 +26,83 @@
   <h1 id="title">You've been sent a project</h1>
   <p class="mut" id="sub">Checking the delivery…</p>
   <input id="pin" placeholder="PIN" style="display:none" inputmode="numeric" autocomplete="one-time-code">
+  <div class="dropzone" id="dz">Drop the encrypted <b>.setpkg.sealed</b> file here</div>
+  <div class="bar" id="bar"><i id="barFill"></i></div>
   <button class="btn" id="go" disabled>Download project</button>
   <p class="err" id="err"></p>
   <p class="ok" id="ok"></p>
   <p class="fine">This file is end-to-end encrypted. The key is in this link and never reaches any server — it decrypts right here in your browser. Sent with setcheck.</p>
 </div>
 <script id="core">
-// ---- decrypt core (kept framework-free so it can be unit-tested in Node) ----
+// ---- decrypt core (framework-free so it can be unit-tested in Node) ----
 const SC = {
   MAGIC: 'STCKSEAL1',
+  STREAM_MAGIC: 'STCKSTRM1',
   b64u: s => Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/').padEnd(Math.ceil(s.length/4)*4,'=')), c=>c.charCodeAt(0)),
-  async unsealWithSecret(sealedBytes, secret) {
-    const dv = new Uint8Array(sealedBytes);
-    const magic = new TextDecoder().decode(dv.slice(0, 9));
-    if (magic !== SC.MAGIC) throw new Error('not a SetCheck package');
-    const hlen = new DataView(dv.buffer, dv.byteOffset + 9, 4).getUint32(0, false);
-    const header = JSON.parse(new TextDecoder().decode(dv.slice(13, 13 + hlen)));
-    const body = dv.slice(13 + hlen);
+
+  // shared: unwrap the file key from a header's pw[] with the link secret (PBKDF2-SHA256 310k)
+  async fileKeyFromSecret(header, secret) {
     if (!header.pw || !header.pw.length) throw new Error('this delivery is locked to a specific person (no link access)');
     const enc = new TextEncoder();
     const base = await crypto.subtle.importKey('raw', enc.encode(secret), 'PBKDF2', false, ['deriveBits']);
-    let fileKey = null;
     for (const st of header.pw) {
       try {
         const bits = await crypto.subtle.deriveBits({ name:'PBKDF2', hash:'SHA-256', salt: SC.b64u(st.s), iterations: 310000 }, base, 256);
         const wk = await crypto.subtle.importKey('raw', bits, 'AES-GCM', false, ['decrypt']);
-        fileKey = new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: SC.b64u(st.n) }, wk, SC.b64u(st.k)));
-        break;
+        return new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: SC.b64u(st.n) }, wk, SC.b64u(st.k)));
       } catch (e) {}
     }
-    if (!fileKey) throw new Error('wrong PIN or link key');
+    throw new Error('wrong PIN or link key');
+  },
+
+  // legacy v1: whole-body single AES-GCM
+  async unsealWithSecret(sealedBytes, secret) {
+    const dv = new Uint8Array(sealedBytes);
+    const magic = new TextDecoder().decode(dv.slice(0, 9));
+    if (magic === SC.STREAM_MAGIC) return SC.unsealStreamBytes(dv, secret);
+    if (magic !== SC.MAGIC) throw new Error('not a setcheck package');
+    const hlen = new DataView(dv.buffer, dv.byteOffset + 9, 4).getUint32(0, false);
+    const header = JSON.parse(new TextDecoder().decode(dv.slice(13, 13 + hlen)));
+    const body = dv.slice(13 + hlen);
+    const fileKey = await SC.fileKeyFromSecret(header, secret);
     const fk = await crypto.subtle.importKey('raw', fileKey, 'AES-GCM', false, ['decrypt']);
     return new Uint8Array(await crypto.subtle.decrypt({ name:'AES-GCM', iv: SC.b64u(header.n) }, fk, body));
+  },
+
+  streamNonce(prefix, i) { const n = new Uint8Array(12); n.set(prefix.slice(0,8),0); new DataView(n.buffer).setUint32(8, i>>>0, false); return n; },
+
+  // stream format, whole buffer already in memory (small/medium files, Node tests)
+  async unsealStreamBytes(dv, secret, onPct) {
+    const parts = [];
+    await SC.unsealStreamCore(dv, secret, (p)=>parts.push(p), onPct);
+    let total = 0; for (const p of parts) total += p.length;
+    const out = new Uint8Array(total); let o = 0;
+    for (const p of parts) { out.set(p, o); o += p.length; }
+    return out;
+  },
+
+  // core chunk loop: emits plaintext chunks via sink(chunkU8) — constant memory apart from the sink
+  async unsealStreamCore(dv, secret, sink, onPct) {
+    const magic = new TextDecoder().decode(dv.slice(0, 9));
+    if (magic !== SC.STREAM_MAGIC) throw new Error('not a setcheck streamed package');
+    const hlen = new DataView(dv.buffer, dv.byteOffset + 9, 4).getUint32(0, false);
+    const header = JSON.parse(new TextDecoder().decode(dv.slice(13, 13 + hlen)));
+    const fileKey = await SC.fileKeyFromSecret(header, secret);
+    const fk = await crypto.subtle.importKey('raw', fileKey, 'AES-GCM', false, ['decrypt']);
+    const prefix = SC.b64u(header.prefix);
+    const csize = (header.chunk || 4*1024*1024) + 16;
+    let pos = 13 + hlen, i = 0;
+    const bodyLen = dv.length - pos;
+    while (pos < dv.length) {
+      const take = Math.min(csize, dv.length - pos);
+      const last = (pos + take >= dv.length);
+      const ct = dv.slice(pos, pos + take);
+      const plain = new Uint8Array(await crypto.subtle.decrypt(
+        { name:'AES-GCM', iv: SC.streamNonce(prefix, i), additionalData: new Uint8Array([last?1:0]) }, fk, ct));
+      sink(plain);
+      pos += take; i++;
+      if (onPct) onPct(Math.floor(((pos - 13 - hlen) / bodyLen) * 100));
+    }
   }
 };
 if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
@@ -61,11 +110,65 @@ if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
 <script>
 (async () => {
   // link: https://open.<domain>/#<id>.<secret>   blobs at STORE/<id>.sealed + <id>.json
-  const STORE = window.SETCHECK_STORE || 'https://pub-ce67196b0b65467394bc7458f1189ca3.r2.dev';   // R2 public bucket / CDN base
+  // manual mode link: #file.<secret> — the user drops the encrypted file onto this page.
+  const STORE = window.SETCHECK_STORE || 'https://pub-ce67196b0b65467394bc7458f1189ca3.r2.dev';
   const $ = id => document.getElementById(id);
+  const setPct = p => { $('bar').style.display='block'; $('barFill').style.width = Math.max(0,Math.min(100,p)) + '%'; };
   const frag = location.hash.slice(1);
   const [id, secret] = frag.split('.');
   if (!id || !secret) { $('sub').textContent = 'This link is incomplete — ask the sender to re-copy it.'; return; }
+
+  async function saveBytes(getParts, suggestedName) {
+    // True streaming save where supported (Chromium): write chunks straight to disk.
+    if (window.showSaveFilePicker) {
+      const handle = await showSaveFilePicker({ suggestedName });
+      const w = await handle.createWritable();
+      await getParts(async part => { await w.write(part); });
+      await w.close();
+      return true;
+    }
+    const parts = [];
+    await getParts(async part => { parts.push(part); });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(parts, { type: 'application/zip' }));
+    a.download = suggestedName; a.click();
+    return true;
+  }
+
+  // ---- manual mode: #file.<secret> → drag the .sealed file in ----
+  if (id === 'file') {
+    $('title').textContent = 'Open an encrypted project file';
+    $('sub').textContent = 'Someone sent you a .setpkg.sealed file. Drop it below — it decrypts right here.';
+    $('dz').style.display = 'block'; $('go').style.display = 'none';
+    const dz = $('dz');
+    ;['dragover','dragenter'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+    ;['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();if(ev==='dragleave')return;dz.classList.remove('over');}));
+    dz.addEventListener('drop', async e => {
+      e.preventDefault();
+      const f = e.dataTransfer?.files?.[0]; if (!f) return;
+      $('err').style.display='none'; dz.textContent = 'Decrypting…';
+      try {
+        const buf = new Uint8Array(await f.arrayBuffer());
+        const sec = $('pin').value ? `${secret}:${$('pin').value}` : secret;
+        const name = f.name.replace(/\.sealed$/i, '.zip').replace(/\.setpkg$/i,'') || 'project.setpkg.zip';
+        const magic = new TextDecoder().decode(buf.slice(0,9));
+        await saveBytes(async write => {
+          if (magic === SC.STREAM_MAGIC) await SC.unsealStreamCore(buf, sec, p => write(p), setPct);
+          else { const plain = await SC.unsealWithSecret(buf, sec); await write(plain); }
+        }, name);
+        $('ok').textContent = 'Decrypted and saved. Unzip it — HOW-THIS-WORKS.md inside explains everything.'; $('ok').style.display='block';
+        dz.textContent = 'Done — drop another file to decrypt it too.';
+      } catch (err) {
+        dz.innerHTML = 'Drop the encrypted <b>.setpkg.sealed</b> file here';
+        $('err').textContent = /wrong/.test(err.message) ? 'Wrong PIN or link — check both and try again.' : ('Could not decrypt: ' + err.message);
+        $('err').style.display = 'block';
+      }
+    });
+    $('pin').style.display = 'block'; $('pin').placeholder = 'PIN (only if they gave you one)';
+    return;
+  }
+
+  // ---- hosted mode: fetch from the sender's storage ----
   let meta = null;
   try { meta = await (await fetch(`${STORE}/${id}.json`)).json(); } catch {}
   if (meta) {
@@ -77,15 +180,26 @@ if (typeof module !== 'undefined') module.exports = SC;   // Node test hook
   } else { $('sub').textContent = 'Ready. (Could not load delivery info — you can still try downloading.)'; }
   $('go').disabled = false;
   $('go').onclick = async () => {
-    $('err').style.display = 'none'; $('go').disabled = true; $('go').textContent = 'Decrypting…';
+    $('err').style.display = 'none'; $('go').disabled = true;
     try {
-      const blob = await (await fetch(`${STORE}/${id}.sealed`)).arrayBuffer();
+      // download with progress
+      $('go').textContent = 'Downloading…';
+      const resp = await fetch(`${STORE}/${id}.sealed`);
+      if (!resp.ok) throw new Error('could not fetch the delivery (' + resp.status + ')');
+      const total = Number(resp.headers.get('content-length')) || (meta && meta.size) || 0;
+      const reader = resp.body.getReader();
+      const chunks = []; let got = 0;
+      while (true) { const { done, value } = await reader.read(); if (done) break; chunks.push(value); got += value.length; if (total) { setPct(got/total*50); $('go').textContent = `Downloading… ${Math.floor(got/total*100)}%`; } }
+      const buf = new Uint8Array(got); { let o=0; for (const c of chunks) { buf.set(c,o); o+=c.length; } }
+      $('go').textContent = 'Decrypting…';
       const sec = $('pin').value ? `${secret}:${$('pin').value}` : secret;
-      const plain = await SC.unsealWithSecret(blob, sec);
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([plain], { type: 'application/zip' }));
-      a.download = `${(meta && meta.track ? meta.track.replace(/[^\w\- ]+/g,'') : 'project')}.setpkg.zip`;
-      a.click();
+      const name = `${(meta && meta.track ? meta.track.replace(/[^\w\- ]+/g,'') : 'project')}.setpkg.zip`;
+      const magic = new TextDecoder().decode(buf.slice(0,9));
+      await saveBytes(async write => {
+        if (magic === SC.STREAM_MAGIC) await SC.unsealStreamCore(buf, sec, p => write(p), p => { setPct(50 + p/2); $('go').textContent = `Decrypting… ${p}%`; });
+        else { const plain = await SC.unsealWithSecret(buf, sec); await write(plain); }
+      }, name);
+      setPct(100);
       $('ok').textContent = 'Downloaded. Unzip it — HOW-THIS-WORKS.md inside explains everything.'; $('ok').style.display = 'block';
       $('go').textContent = 'Download again';
     } catch (e) {
