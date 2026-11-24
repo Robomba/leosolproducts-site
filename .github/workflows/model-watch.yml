@@ -1,0 +1,66 @@
+name: musicaguide-model-watch
+
+# Weekly: check every model MusicaGuide relies on against the providers, repair
+# musicaguide/models.json where it is safe to, and open a pull request for you to
+# approve. Nothing goes live until you merge (Vercel deploys on merge to master).
+#
+# Needs repo secrets OPENAI_API_KEY, ANTHROPIC_API_KEY, GROQ_API_KEY (any provider
+# without a key is skipped), and Settings > Actions > General > "Allow GitHub Actions
+# to create and approve pull requests" turned on.
+
+on:
+  schedule:
+    - cron: "17 14 * * 1"     # Mondays 14:17 UTC (9:17 am New York)
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "musicaguide/models.json"
+      - "tools/model_watch.py"
+      - "tools/test_model_watch.py"
+
+permissions:
+  contents: read
+
+jobs:
+  # Every PR that touches the manifest: schema check + checker tests. No keys needed.
+  validate:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tools/model_watch.py --validate
+      - run: python3 tools/test_model_watch.py
+
+  watch:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check providers and repair manifest
+        id: check
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          set +e
+          python3 tools/model_watch.py
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+          cat model-watch-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Open pull request with the repaired manifest
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: bot/musicaguide-models
+          add-paths: musicaguide/models.json
+          commit-message: "musicaguide: weekly model manifest update"
+          title: "MusicaGuide models: weekly update"
+          body-path: model-watch-report.md
+          delete-branch: true
+      - name: Fail loudly if something needs a human
+        if: steps.check.outputs.code != '0'
+        run: |
+          echo "::error::Model check found problems it could not repair. See the job summary."
+          exit 1

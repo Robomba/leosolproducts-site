@@ -42,7 +42,8 @@
   </ul>
 
   <h2>2. How your questions reach the AI</h2>
-  <p>Musicaguide is "bring your own key." When you ask a question, your prompt is sent <b>directly from your computer to the AI provider you chose</b> (OpenAI or Anthropic), using your own account and key. That exchange is governed by <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">OpenAI's</a> or <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic's</a> privacy policy, not ours. We are never in the middle of that request.</p>
+  <p>Musicaguide is "bring your own key." When you ask a question, your prompt is sent <b>directly from your computer to the AI provider you chose</b> (OpenAI, Anthropic, or Groq), using your own account and key. That exchange is governed by <a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">OpenAI's</a>, <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic's</a>, or Groq's privacy policy, not ours. We are never in the middle of that request.</p>
+  <p><b>Model list updates.</b> When it starts, Musicaguide 0.3 and later downloads a small public file from leosolproducts.com that lists current AI model names, so the plugin keeps working when providers retire old models. That request carries nothing about you: no install ID, no prompts, no API key. As with any web request, our host (Vercel) sees your IP address in its standard logs.</p>
 
   <h2>3. Anonymous usage data we DO collect</h2>
   <p>To understand how Musicaguide is used and to make it better, the plugin sends anonymized usage events. Each event may include:</p>
@@ -55,7 +56,7 @@
   <div class="note">Because the questions and responses can contain whatever text you type, we treat this data carefully, store it securely, and never sell or share it. If you'd rather we collect nothing, see Section 4.</div>
 
   <h2>4. Your choice — opt out anytime</h2>
-  <p>Anonymous usage collection is enabled by default and clearly disclosed on first run. You can turn it off at any time: open <b>Settings</b> in the plugin and switch off <b>"Share anonymous usage data."</b> When it's off, the plugin sends us nothing.</p>
+  <p>Anonymous usage collection is enabled by default and clearly disclosed on first run. You can turn it off at any time: open <b>Settings</b> in the plugin and switch off <b>"Share anonymous usage data."</b> When it's off, the plugin sends us no usage data (it still checks the public model list described in Section 2).</p>
 
   <h2>5. Where the data is stored</h2>
   <p>Anonymous usage data is stored in our database provider (Supabase). It is retained only as long as it's useful for product improvement.</p>
